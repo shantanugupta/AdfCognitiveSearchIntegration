@@ -1,0 +1,8 @@
+*bin
+*obj
+*.vs
+*.vscode
+C Sharp*
+App.config
+Settings.settings
+Settings.Designer.cs
