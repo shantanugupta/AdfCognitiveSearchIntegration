@@ -6,3 +6,5 @@ C Sharp*
 App.config
 Settings.settings
 Settings.Designer.cs
+/OmsCli/generated_files
+/OmsCli/OmsCli/generated_files
