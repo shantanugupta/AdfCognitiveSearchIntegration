@@ -1,6 +1,5 @@
 ﻿using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using System.Configuration;
 
 namespace OmsCli.AdfManager
 {
@@ -25,8 +24,7 @@ namespace OmsCli.AdfManager
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error accessing Key Vault: {ex.Message}");
-                return "Could not retrieve credentials";
+                throw new ApplicationException($"Error retriving secret from key vault. Error message: {ex.Message}", ex);
             }
         }
     }

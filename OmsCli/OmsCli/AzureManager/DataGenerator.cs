@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using Azure.Core;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
-using CsvHelper;
-using Faker;
 using Newtonsoft.Json;
 using OmsCli.AdfManager;
 using OmsCli.Model;
-
+using Serilog;
 
 namespace OmsCli.AzureManager
 {
@@ -34,7 +23,7 @@ namespace OmsCli.AzureManager
         /// Max no of categories to create
         /// </summary>
         /// <param name="seed"></param>
-        public DataGenerator(int seed)
+        public DataGenerator(int seed = 100)
         {
             Settings setting = new Settings();
             var blobConnectionString = KeyVaultManager.GetSecret(setting.OmsblobstoreConnectionStringSecret);
@@ -49,33 +38,40 @@ namespace OmsCli.AzureManager
         }
         public void Generate()
         {
-            // Generate data for Categories table
-            List<Category> categoriesData = GenerateCategoriesData();
-            WriteToCsv(categoriesData.OfType<IBaseModel>().ToList(), "categories.csv");
-            Console.WriteLine("CSV creation completed for categories");
+            try
+            {
+                // Generate data for Categories table
+                List<Category> categoriesData = GenerateCategoriesData();
+                WriteToCsv(categoriesData.OfType<IBaseModel>().ToList(), "categories.csv");
+                Log.Information("CSV creation completed for categories");
 
-            // Generate data for Products table
-            List<Product> productsData = GenerateProductsData(categoriesData);
-            WriteToCsv(productsData.OfType<IBaseModel>().ToList(), "products.csv");
-            Console.WriteLine("CSV creation completed for products");
+                // Generate data for Products table
+                List<Product> productsData = GenerateProductsData(categoriesData);
+                WriteToCsv(productsData.OfType<IBaseModel>().ToList(), "products.csv");
+                Log.Information("CSV creation completed for products");
 
-            // Generate data for Orders table
-            List<Order> ordersData = GenerateOrdersData(productsData);
-            WriteToCsv(ordersData.OfType<IBaseModel>().ToList(), "orders.csv");
-            Console.WriteLine("CSV creation completed for orders");
+                // Generate data for Orders table
+                List<Order> ordersData = GenerateOrdersData(productsData);
+                WriteToCsv(ordersData.OfType<IBaseModel>().ToList(), "orders.csv");
+                Log.Information("CSV creation completed for orders");
 
 
-            categoriesData = GenerateCategoriesData();
-            WriteToJson(categoriesData.OfType<IBaseModel>().ToList(), "categories.json");
-            Console.WriteLine("JSON creation completed for categories");
+                categoriesData = GenerateCategoriesData();
+                WriteToJson(categoriesData.OfType<IBaseModel>().ToList(), "categories.json");
+                Log.Information("JSON creation completed for categories");
 
-            productsData = GenerateProductsData(categoriesData);
-            WriteToJson(productsData.OfType<IBaseModel>().ToList(), "products.json");
-            Console.WriteLine("JSON creation completed for products");
+                productsData = GenerateProductsData(categoriesData);
+                WriteToJson(productsData.OfType<IBaseModel>().ToList(), "products.json");
+                Log.Information("JSON creation completed for products");
 
-            ordersData = GenerateOrdersData(productsData);
-            WriteToJson(ordersData.OfType<IBaseModel>().ToList(), "orders.json");
-            Console.WriteLine("JSON creation completed for orders");
+                ordersData = GenerateOrdersData(productsData);
+                WriteToJson(ordersData.OfType<IBaseModel>().ToList(), "orders.json");
+                Log.Information("JSON creation completed for orders");
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Error generating files. Error message: {ex.Message}", ex);
+            }
         }
 
         /// <summary>

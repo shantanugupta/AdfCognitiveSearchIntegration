@@ -5,13 +5,15 @@ using Azure.ResourceManager;
 using Azure.ResourceManager.DataFactory;
 using Azure.ResourceManager.DataFactory.Models;
 using Azure.ResourceManager.Resources;
+using System;
+using System.Collections.Generic;
 
 namespace OmsCli.AdfManager
 {
     public static class AdfManager
     {
         #region Azure parameters
-        private static readonly Settings setting = new();
+        private static readonly Settings setting = new Settings();
 
         // Set variables
         private static readonly string tenantID = setting.TenantId;
@@ -47,49 +49,62 @@ namespace OmsCli.AdfManager
 
         public static Response<PipelineCreateRunResult> TriggerPipeline(string pipelineName, IDictionary<string, BinaryData>? parameters)
         {
-            Console.WriteLine($"Reading datafactory: {dataFactoryName}");
-            var dataFactoryResource = GetDataFactory();
+            try {
+                Console.WriteLine($"Reading datafactory: {dataFactoryName}");
+                var dataFactoryResource = GetDataFactory();
 
-            // Create a pipeline run
-            Console.WriteLine("Creating pipeline run...");
-            var pipelineResource = dataFactoryResource.GetDataFactoryPipeline(pipelineName);
+                // Create a pipeline run
+                Console.WriteLine("Creating pipeline run...");
+                var pipelineResource = dataFactoryResource.GetDataFactoryPipeline(pipelineName);
 
-            Console.WriteLine($"Starting pipeline run: {pipelineName}");
-            var runResponse = pipelineResource.Value.CreateRun(parameters);
-            Console.WriteLine("Pipeline run ID: " + runResponse.Value.RunId);
+                Console.WriteLine($"Starting pipeline run: {pipelineName}");
+                var runResponse = pipelineResource.Value.CreateRun(parameters);
+                Console.WriteLine("Pipeline run ID: " + runResponse.Value.RunId);
 
-            return runResponse;
+                return runResponse;
+            }
+            catch(Exception ex)
+            {
+                throw new ApplicationException($"Pipeline trigger failed - error details: {ex.Message}", ex);
+            }
         }
 
         public static void MonitorPipeline(string pipelineRunId, string pipelineName)
         {
-            Console.WriteLine($"Reading datafactory: {dataFactoryName}");
-            var dataFactoryResource = GetDataFactory();
-
-
-            // Monitor the pipeline run
-            Console.WriteLine($"Checking pipeline ${pipelineName} run status...");
-            DataFactoryPipelineRunInfo pipelineRun;
-            while (true)
+            try
             {
-                pipelineRun = dataFactoryResource.GetPipelineRun(pipelineRunId);
-                Console.WriteLine($"Status: {pipelineRun.Status}");
-                if (pipelineRun.Status == "InProgress" || pipelineRun.Status == "Queued")
+                Console.WriteLine($"Reading datafactory: {dataFactoryName}");
+                var dataFactoryResource = GetDataFactory();
+
+
+                // Monitor the pipeline run
+                Console.WriteLine($"Checking pipeline ${pipelineName} run status...");
+                DataFactoryPipelineRunInfo pipelineRun;
+                while (true)
                 {
-                    Console.WriteLine($"Sleeping for 15 seconds,  pipeline status {pipelineRun.Status}");
-                    System.Threading.Thread.Sleep(15000);
+                    pipelineRun = dataFactoryResource.GetPipelineRun(pipelineRunId);
+                    Console.WriteLine($"Status: {pipelineRun.Status}");
+                    if (pipelineRun.Status == "InProgress" || pipelineRun.Status == "Queued")
+                    {
+                        Console.WriteLine($"Sleeping for 15 seconds,  pipeline status {pipelineRun.Status}");
+                        System.Threading.Thread.Sleep(15000);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Pipeline completed successfully. Status {pipelineRun.Status}");
+                        break;
+                    }
                 }
-                else
-                {
-                    Console.WriteLine($"Pipeline completed successfully. Status {pipelineRun.Status}");
-                    break;
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Monitoring failed - error details: {ex.Message}", ex);
             }
         }
 
         private static ArmClient ObtainArmClient()
         {
-            ArmClient armClient = new(
+            ArmClient armClient = new ArmClient(
                 new ClientSecretCredential(tenantID, applicationId, authenticationKey, new TokenCredentialOptions
                 {
                     AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
