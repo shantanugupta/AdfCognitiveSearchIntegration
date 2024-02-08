@@ -105,4 +105,4 @@ build and execute C# project - [OmsCli](OmsCli/OmsCli.sln)
 This project has excluded few important configuration files
 - App.config
 - Settings.settings 
-![Settings.settings](assets/Settings.Settings.png)
+![Settings.settings](Assets/Settings.Settings.png)
