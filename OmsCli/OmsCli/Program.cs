@@ -66,7 +66,7 @@ internal class Program
                         TriggerPipeline();
                         break;
                     case "3":
-                        Console.WriteLine("Enter pipeline name: ");
+                        Console.WriteLine("Enter pipeline runId: ");
                         string pipeline = Console.ReadLine();
                         Monitor(pipeline);
                         break;
