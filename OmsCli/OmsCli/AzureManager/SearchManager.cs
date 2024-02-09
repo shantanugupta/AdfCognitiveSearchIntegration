@@ -25,10 +25,10 @@ namespace OmsCli.AzureManager
             SearchClient client = new(serviceEndpointUri, indexName, credential);
 
             Console.WriteLine($"Searching {searchText} in index - {indexName}");
-            SearchResults<Product> searchResponse = await client.SearchAsync<Product>(searchText);
-            await foreach (SearchResult<Product> result in searchResponse.GetResultsAsync())
+            SearchResults<ProductSearchModel> searchResponse = await client.SearchAsync<ProductSearchModel>(searchText);
+            await foreach (SearchResult<ProductSearchModel> result in searchResponse.GetResultsAsync())
             {
-                Product p = result.Document;
+                    ProductSearchModel p = result.Document;
                 Console.WriteLine($"Name: {p.Name}, Price: {p.Price}, Date: {p.Date}");
             }
             }
