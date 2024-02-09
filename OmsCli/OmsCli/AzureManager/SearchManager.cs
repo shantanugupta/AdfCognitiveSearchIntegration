@@ -16,18 +16,24 @@ namespace OmsCli.AzureManager
             apiKey = KeyVaultManager.GetSecret(setting.SearchSecret);
         }
 
-        public static async void Search(string indexName = "products-index")
+        public static async void Search(string indexName = "products-index", string searchText= "abbott")
         {
+            try { 
             // Create a SearchClient
             Uri serviceEndpointUri = new(searchServiceEndpoint);
             AzureKeyCredential credential = new(apiKey);
             SearchClient client = new(serviceEndpointUri, indexName, credential);
-           
-            SearchResults<Product> searchResponse = await client.SearchAsync<Product>("day");
+
+            Console.WriteLine($"Searching {searchText} in index - {indexName}");
+            SearchResults<Product> searchResponse = await client.SearchAsync<Product>(searchText);
             await foreach (SearchResult<Product> result in searchResponse.GetResultsAsync())
             {
                 Product p = result.Document;
                 Console.WriteLine($"Name: {p.Name}, Price: {p.Price}, Date: {p.Date}");
+            }
+            }
+            catch(Exception ex ) { 
+                Console.WriteLine($"Failed to search: {ex.Message}");
             }
         }
     }

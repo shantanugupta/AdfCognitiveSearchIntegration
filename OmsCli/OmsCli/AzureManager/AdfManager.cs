@@ -40,7 +40,7 @@ namespace OmsCli.AdfManager
         /// <summary>
         /// specify the name of data factory to create. It must be globally unique
         /// </summary>
-        private static readonly string dataFactoryName = "omsadf-learning";
+        private static readonly string dataFactoryName = "learning-adf-cognitive";
 
 
         public const string PIPELINE = "RandomData";

@@ -98,7 +98,9 @@ internal class Program
     {
         try
         {
-            SearchManager.Search(indexName);
+            Console.WriteLine("Enter product name to search: ");
+            string searchText = Console.ReadLine();
+            SearchManager.Search(indexName, searchText);
         }
         catch (ApplicationException ex)
         {
