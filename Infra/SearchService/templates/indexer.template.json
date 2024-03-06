@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+      {
+        "type": "Microsoft.Search/searchServices/indexers",
+        "apiVersion": "2020-08-01",
+        "name": "[concat(parameters('searchServiceName'), '/', parameters('indexerName'))]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Search/searchServices', parameters('searchServiceName'))]"
+        ],
+        "properties": {
+          "dataSourceName": "[parameters('dataSourceName')]",
+          "targetIndexName": "[parameters('targetIndexName')]",
+          "schedule": {
+            "interval": "PT1H"  // Adjust the interval as needed
+          }
+          // Additional properties for the indexer configuration can be added here
+        }
+      }
+    ]
+  }
+  

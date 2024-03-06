@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "searchServiceName": {
+        "value": "YourSearchServiceName"
+      },
+      "indexName": {
+        "value": "YourIndexName"
+      },
+      "fields": {
+        "value": [
+          {
+            "name": "field1",
+            "type": "Edm.String"
+          },
+          {
+            "name": "field2",
+            "type": "Edm.Int32"
+          },
+          {
+            "name": "field3",
+            "type": "Edm.Boolean"
+          }
+          // Add more fields as needed
+        ]
+      }
+    }
+  }
+  

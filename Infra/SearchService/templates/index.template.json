@@ -1,0 +1,20 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+      {
+        "type": "Microsoft.Search/searchServices/indexes",
+        "apiVersion": "2020-08-01",
+        "name": "[concat(parameters('searchServiceName'), '/', parameters('indexName'))]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Search/searchServices', parameters('searchServiceName'))]"
+        ],
+        "properties": {
+          "fields": "[parameters('fields')]",
+          "scoringProfiles": [],  // Add scoring profiles if needed
+          "suggesters": []       // Add suggesters if needed
+        }
+      }
+    ]
+  }
+  

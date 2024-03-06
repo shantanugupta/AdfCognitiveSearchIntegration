@@ -1,0 +1,22 @@
+{
+    "@odata.context": "https://learningomssearch.search.windows.net/$metadata#indexers/$entity",
+    "@odata.etag": "\"0x8DC377079C0ADF0\"",
+    "name": "orders-indexer",
+    "description": null,
+    "dataSourceName": "orders-dataSource",
+    "skillsetName": null,
+    "targetIndexName": "orders-index",
+    "disabled": null,
+    "schedule": null,
+    "parameters": {
+      "batchSize": null,
+      "maxFailedItems": null,
+      "maxFailedItemsPerBatch": null,
+      "base64EncodeKeys": null,
+      "configuration": {}
+    },
+    "fieldMappings": [],
+    "outputFieldMappings": [],
+    "cache": null,
+    "encryptionKey": null
+  }

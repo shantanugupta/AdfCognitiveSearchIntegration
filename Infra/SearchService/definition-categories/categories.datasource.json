@@ -1,0 +1,21 @@
+{
+    "@odata.context": "https://learningomssearch.search.windows.net/$metadata#datasources/$entity",
+    "@odata.etag": "\"0x8DC33FFC1E80BC9\"",
+    "name": "categories-dataSource",
+    "description": null,
+    "type": "azuresql",
+    "subtype": null,
+    "credentials": {
+      "connectionString": "__CATEGORIES_DATASOURCE__"
+    },
+    "container": {
+      "name": "[categories]",
+      "query": null
+    },
+    "dataChangeDetectionPolicy": {
+      "@odata.type": "#Microsoft.Azure.Search.SqlIntegratedChangeTrackingPolicy"
+    },
+    "dataDeletionDetectionPolicy": null,
+    "encryptionKey": null,
+    "identity": null
+  }

@@ -9,3 +9,4 @@ Settings.Designer.cs
 /OmsCli/generated_files
 /OmsCli/OmsCli/generated_files
 /OmsCli/OmsCli/log20240121.txt
+*.credentials
