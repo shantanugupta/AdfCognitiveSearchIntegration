@@ -1,14 +1,28 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
+  "parameters": {
+    "searchServiceName": {
+      "defaultValue": "learningomssearch",
+      "type": "string"
+    },
+    "sku": {
+      "type": "string",
+      "defaultValue": "free",
+      "allowedValues": [
+        "free",
+        "basic"
+      ]
+    }
+  },
   "resources": [
     {
       "type": "Microsoft.Search/searchServices",
       "apiVersion": "2020-08-01",
       "name": "[parameters('searchServiceName')]",
       "location": "[resourceGroup().location]",
-      "properties": {
-        "sku": "[parameters('sku')]"
+      "sku": {
+        "name": "[parameters('sku')]"
       }
     }
   ],

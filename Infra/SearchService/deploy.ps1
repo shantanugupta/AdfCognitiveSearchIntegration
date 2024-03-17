@@ -1,21 +1,38 @@
+
 $resourceGroup = YourResourceGroup
-az group deployment create `
+$search_Service_response = 
+    az group deployment create `
     --resource-group $resourceGroup  `
-    --template-file searchService.template.json `
-    --parameters @searchService.parameters.json 
+    --template-file .\templates\searchservice.template.json `
+    --parameters .\parameters\searchservice.parameter.json 
 
-az group deployment create `
---resource-group $resourceGroup `
---template-file dataSource.template.json `
---parameters @dataSource.parameters.json
+# set variables
+$search_service_name = $search_Service_response.name
+$apiKey = $search_Service_response.api_key
 
-az group deployment create `
---resource-group $resourceGroup `
---template-file indexer.template.json `
---parameters @indexer.parameters.json
+# Create data source
+$resources = @("categories","orders",'products')
 
-
-az group deployment create `
-    --resource-group $resourceGroup `
-    --template-file index.template.json `
-    --parameters @index.parameters.json 
+$resources % {
+    Add-SearchDataSource `
+        -SearchServiceName $search_service_name `
+        -ApiKey $apiKey `
+        -DataSourceName $dataSourceName `
+        -DatabaseConnectionString $connectionString `
+        -ContainerName $containerName `
+        -Payload $dsPayload
+    
+    # Create indexer
+    Add-SearchIndex `
+    -SearchServiceName $search_service_name `
+    -ApiKey $apiKey `
+    -IndexName $indexName
+    
+    # Create index
+    Add-SearchIndexer 
+    -SearchServiceName $search_service_name `
+    -ApiKey $apiKey `
+    -DataSourceName $dataSourceName `
+    -IndexName $indexName `
+    -IndexerName $indexerName
+}

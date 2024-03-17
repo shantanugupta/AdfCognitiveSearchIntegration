@@ -1,6 +1,5 @@
 {
     "@odata.context": "https://learningomssearch.search.windows.net/$metadata#indexers/$entity",
-    "@odata.etag": "\"0x8DC36E5A06B740A\"",
     "name": "products-indexer",
     "description": "",
     "dataSourceName": "products-dataSource",

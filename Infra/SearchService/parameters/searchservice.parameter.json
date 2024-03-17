@@ -7,7 +7,12 @@
       "type": "string"
     },
     "sku": {
-      "name": "basic"
+      "type": "string",
+      "defaultValue": "free",
+      "allowedValues": [
+        "free",
+        "basic"
+      ]
     }
   }
 }

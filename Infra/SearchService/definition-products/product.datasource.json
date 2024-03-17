@@ -1,6 +1,5 @@
 {
     "@odata.context": "https://learningomssearch.search.windows.net/$metadata#datasources/$entity",
-    "@odata.etag": "\"0x8DC33FFC1F020DA\"",
     "name": "products-dataSource",
     "description": null,
     "type": "azuresql",
